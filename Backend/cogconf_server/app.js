@@ -1,6 +1,7 @@
 const express = require("express")
 const cors = require("cors")
-const joi = require('@hapi/joi')
+// const joi = require('@hapi/joi')
+const joi = require('joi')
 //定义服务器实例
 const app = express()
 const config = require('./config')
@@ -32,18 +33,19 @@ app.use('/api', userRouter)
 
 
 //启动服务器
-app.listen(8081, () => {
-  console.log("express server running at https://127.0.0.1:8081")
+app.listen(8082, () => {
+  console.log("express server running at https://127.0.0.1:8082")
 })
 //错误中间件
 app.use((err, req, res, next) => {
   //数据验证失败
   if (err instanceof joi.ValidationError)
-    return res.cc(err)
+    return res.send(err.message)
   // 捕获身份认证失败的错误
   if (err.name === 'UnauthorizedError')
-    return res.cc('身份认证失败！')
-
+    // return res.cc('身份认证失败！')
+    return res.send("身份认证失败")
   //未知错误
-  res.cc(err)
+  // res.cc(err)
+  res.send(err.message)
 })
